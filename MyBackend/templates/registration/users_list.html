@@ -1,52 +1,154 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8" />
   <title>Users List</title>
   <style>
-    body { font-family: Arial, sans-serif; padding:24px; background:#f7f9fc; }
-    .top { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
-    table { width:100%; border-collapse:collapse; background:white; border-radius:8px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.04); }
-    th, td { padding:12px 16px; text-align:left; border-bottom:1px solid #f0f0f0; }
-    th { background:#eef3fb; font-weight:700; }
-    tr:hover td { background:#fbfdff; }
-    a.button { padding:8px 12px; background:#2b6cb0; color:white; border-radius:6px; text-decoration:none; }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 24px;
+      background: #f7f9fc;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+    }
+
+    th,
+    td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    th {
+      background: #eef3fb;
+      font-weight: 700;
+    }
+
+    tr:hover td {
+      background: #fbfdff;
+    }
+
+    a.button {
+      padding: 8px 18px;
+      color: #fff;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin: 0 2px;
+      display: inline-block;
+    }
+    a.button.add-btn {
+      background: #38a169;
+    }
+    a.button.add-btn:hover {
+      background: #2f855a;
+    }
+    a.button.edit-btn {
+      background: #2563eb;
+    }
+    a.button.edit-btn:hover {
+      background: #1d4ed8;
+    }
+    a.button.delete-btn {
+      background: #e53e3e;
+    }
+    a.button.delete-btn:hover {
+      background: #b91c1c;
+    }
+    .edit-btn {
+      background: #2563eb;
+    }
+    .edit-btn:hover {
+      background: #1d4ed8;
+    }
+    .delete-btn {
+      background: #e53e3e;
+    }
+    .delete-btn:hover {
+      background: #b91c1c;
+    }
   </style>
 </head>
+
 <body>
   <div class="top">
     <h1 style="margin:0;">All Users</h1>
     <div>
       Logged in as <strong>{{ current_user }}</strong>
-      <a href="{% url 'registration:logout_html' %}" class="button" style="margin-left:10px;">Logout</a>
+      <a href="{% url 'registration:logout_html' %}" class="button delete-btn" style="margin-left:10px;">Logout</a>
     </div>
+  </div>
+
+  <div style="margin-bottom: 12px;">
+    <a href="{% url 'registration:user_create_html' %}" class="button add-btn">Add New User</a>
   </div>
 
   <table>
     <thead>
       <tr>
         <th>#</th>
+        <th>Profile Picture</th>
         <th>First name</th>
         <th>Last name</th>
         <th>Email</th>
         <th>Gender</th>
         <th>Date registered</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
       {% for u in users %}
       <tr>
         <td>{{ forloop.counter }}</td>
+
+        <td>
+          {% if u.profile_picture %}
+          <img src="{{u.profile_picture.url}}" alt="Profile Picture" width="70" height="70"
+            style="object-fit: cover; border-radius:50%;" />
+          {% else %}
+          <span>No Image</span>
+          {% endif %}
+        </td>
+
         <td>{{ u.first_name }}</td>
         <td>{{ u.last_name }}</td>
         <td>{{ u.email }}</td>
         <td>{{ u.gender|default:"N/A" }}</td>
         <td>{{ u.date_registered|date:"Y-m-d H:i" }}</td>
+
+        <td>
+          <a href="{% url 'registration:user_update_html' u.id %}" class="button edit-btn">Edit</a>
+          <a href="{% url 'registration:user_delete_html' u.id %}" class="button delete-btn">Delete</a>
+        </td>
+
+
       </tr>
       {% empty %}
-      <tr><td colspan="6">No users yet.</td></tr>
+      <tr>
+        <td colspan="6">No users yet.</td>
+      </tr>
       {% endfor %}
     </tbody>
   </table>
 </body>
+
 </html>
