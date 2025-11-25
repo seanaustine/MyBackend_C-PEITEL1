@@ -122,8 +122,7 @@
 
         <td>
           {% if u.profile_picture %}
-          <img src="{{u.profile_picture.url}}" alt="Profile Picture" width="70" height="70"
-            style="object-fit: cover; border-radius:50%;" />
+          <img src="{{u.profile_picture.url}}" alt="Profile Picture" width="120" height="120" style="object-fit: cover; border-radius:50%; border: 2px solid #5A0E24 ;"/>
           {% else %}
           <span>No Image</span>
           {% endif %}
